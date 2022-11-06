@@ -9,7 +9,6 @@ import { TicketModule } from './ticket/ticket.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    ,
     TicketModule,
     AuthModule,
     PrismaModule,

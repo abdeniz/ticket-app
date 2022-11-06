@@ -21,6 +21,7 @@ model User {
 model Ticket {
   id          Int      @id @default(autoincrement())
   purchasedAt DateTime @default(now())
+  expireAt    DateTime
 
   User   User? @relation(fields: [userId], references: [id])
   userId Int?
