@@ -1,14 +1,45 @@
 version: '3.8'
 services:
-  dev-db:
+  postgres:
     image: postgres:15
     ports:
-      - 5434:5432
+      - 5432:5432
     environment:
-      - POSTGRES_USER=deniz
-      - POSTGRES_PASSWORD=123
-      - POSTGRES_DB=ticket-app
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     networks:
       - abdeniz
+
+  caddy:
+    image: caddy/caddy:2.2.1-alpine
+    container_name: caddy-service
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+
+  ticket-app:
+    container_name: ticket-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 1337:1337
+    depends_on:
+      - postgres
+      - caddy
+    env_file:
+      - .env
+
 networks:
   abdeniz:
+
+volumes:
+  caddy_data:
+  caddy_config:
