@@ -3,7 +3,7 @@ https://denizandco.com {
       header_down Strict-Transport-Security max-age=31536000;
   }
 
-  proxy / localhost:5432 {
+  reverse_proxy / localhost:5432 {
     transparent
   }
 }
